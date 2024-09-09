@@ -1,0 +1,12 @@
+Real-Time Chat Application (Web-Based) - Software Engineering Requirements
+1.	Authentication: The system shall support user authentication via Gmail, requiring users to register or log in using their Gmail accounts.
+2.	Chats: The system shall allow users to send and receive text messages in real-time. The system shall support file attachments, including images, documents, and other media. The system shall allow users to share their geographical location within a chat session. Chats shall be encrypted end-to-end to ensure user privacy and data security. Chats shall be ephemeral, automatically deleting from the system 24 hours after being sent.
+3.	Notification: The system shall enable push notifications on users' devices for incoming messages. The system shall allow users to opt in to receive email notifications for unread messages or events.
+4.	Profile Picture: The system shall provide a default profile picture for users who do not upload their own. The system shall allow users to change their profile picture at any time.
+Further Implantation If possible:
+
+5.	Keyboard: The system shall support a multilingual keyboard to accommodate users who communicate in different languages.
+6.	Compatibility: The system shall be compatible with major web browsers including Google Chrome, Mozilla Firefox, and Safari.
+7.	QR code: The system shall implement QR code functionality to allow users to easily share their profiles.
+8.	Lockout: The system shall automatically sign out users after a period of inactivity to enhance security.
+
