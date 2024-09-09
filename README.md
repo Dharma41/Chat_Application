@@ -5,7 +5,7 @@ The Real-time Chat Application aims to provide a seamless and secure communicati
 To run the Chat Application locally, follow these steps:
 1. Clone the repository to your local machine:
    ```bash
-   git clone [https://github.com/yourusername/real-time-chat-app.git](https://github.com/Dharma41/Chat_Application)
+   git clone https://github.com/Dharma41/Chat_Application
    ```
 2. Navigate to the project directory:
    ```bash
