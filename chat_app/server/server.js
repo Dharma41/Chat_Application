@@ -8,12 +8,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MongoDB connection
-// mongoose.connect('mongodb://localhost:27017/chat-app', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-mongoose.connect('mongodb://localhost:27017/chat-app');
+mongoose.connect('mongodb://localhost:27017/chat-app')
+  .then(() => console.log('MongoDB connected'))
+  .catch((error) => console.error('MongoDB connection error:', error));
 
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
