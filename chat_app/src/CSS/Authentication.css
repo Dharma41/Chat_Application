@@ -1,39 +1,119 @@
+/* General container for the authentication form */
 .auth-container {
-    background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
-    padding: 20px;
-    border-radius: 10px;
-    display: inline-block;
-  }
-  
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  label {
-    color: #fff;
-    font-size: 1.2rem;
-  }
-  
-  input {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .auth-button {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #28a745;
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  
-  .auth-button:hover {
-    background-color: #218838;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.auth-form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Form Labels */
+.auth-form label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Input fields */
+.auth-form input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Focus effect for input fields */
+.auth-form input:focus {
+  border-color: #007bff;
+}
+
+/* Error message */
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 1rem;
+}
+
+/* Submit button */
+.auth-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+/* Submit button hover effect */
+.auth-button:hover {
+  background-color: #0056b3;
+}
+
+/* Disabled button */
+.auth-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Google button for social login */
+.google-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #42f483;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.google-button img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.google-button:hover {
+  background-color: #4ae835;
+}
+
+/* Toggle between login and register */
+.toggle-auth {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 14px;
+  color: #555;
+}
+
+.toggle-auth span {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.toggle-auth span:hover {
+  color: #0056b3;
+}
