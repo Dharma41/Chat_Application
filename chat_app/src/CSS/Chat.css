@@ -1,0 +1,28 @@
+.chat-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+  
+  /* Main chat area */
+  .chat-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chat-header {
+    padding: 20px;
+    background-color: #4a4a4a;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .message-container {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
