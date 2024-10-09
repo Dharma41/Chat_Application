@@ -134,3 +134,38 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+app.get('/users', async (req, res) => {
+  const { search } = req.query;
+  try {
+    const users = await User.find({ email: { $regex: search, $options: "i" } }); // MongoDB query to search by email
+    res.json(users.map(user => user.email)); // Return a list of user emails as search results
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Configure multer to handle file uploads
+
+app.post('/send-message', upload.single('image'), async (req, res) => {
+  const { text, receiver } = req.body;
+  const imagePath = req.file ? req.file.path : null;
+
+  try {
+    // Store the message in the database (this is just a placeholder)
+    const message = {
+      text,
+      imagePath,
+      receiver,
+      sender: "currentUser@example.com", // Replace with authenticated user
+      timestamp: new Date(),
+    };
+
+    // Save message in your database
+    res.json({ success: true, message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to send message" });
+  }
+});
