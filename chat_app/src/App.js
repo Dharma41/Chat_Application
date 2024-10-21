@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Authentication from './Components/Authentication';
-import Chat from './Components/Chat'; // Your chat component
+import Authentication from './Components/Authentication.jsx';
+import Chat from './Components/Chat.jsx'; // Your chat component
 
 function App() {
   return (

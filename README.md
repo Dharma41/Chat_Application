@@ -20,3 +20,9 @@ To run the Chat Application locally, follow these steps:
    npm start
    ```
 6. Access the application in your web browser at `http://localhost:8000`.
+
+Dependies
+   
+  npm install socket.io socket.io-client
+
+
