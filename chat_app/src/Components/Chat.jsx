@@ -1,14 +1,32 @@
-import React, { useState } from "react";
-import ChatMessage from "./ChatMessage";
-import ChatSidebar from "./ChatSidebar";
-import '../CSS/Chat.css';
+import React, { useState, useEffect } from "react";
+import ChatMessage from "./ChatMessage"; // Assuming ChatMessage is in the same folder
+import ChatSidebar from "./ChatSidebar"; // Sidebar for recent chats and search bar
+import '../CSS/Chat.css'; // CSS for styling the chat interface
+import { io } from "socket.io-client"; // Import Socket.IO client
 
 const Chat = () => {
-  const [selectedUser, setSelectedUser] = useState(null); // Selected user to chat with
-  const [messages, setMessages] = useState([]); // Messages for the current conversation
-  const [textMessage, setTextMessage] = useState(""); // Text input for message
-  const [image, setImage] = useState(null); // Image input for message
+  const [selectedUser, setSelectedUser] = useState(null); // Store the selected user for chat
+  const [messages, setMessages] = useState([]); // Store the messages for the conversation
+  const [textMessage, setTextMessage] = useState(""); // Input for text message
+  const [image, setImage] = useState(null); // Input for image message
+  const socket = io("http://localhost:5001"); // Connect to the Socket.IO server
 
+  // Load messages and listen for incoming messages
+  useEffect(() => {
+    // Listen for incoming messages
+    socket.on("receive-message", (message) => {
+      if (message.receiver === "dchitte@okstate.edu") { // Replace with actual logged-in user
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
+    });
+
+    // Clean up Socket.IO on component unmount
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
+
+  // Function to handle sending the message
   const handleSendMessage = async () => {
     if (!selectedUser || (!textMessage && !image)) {
       alert("Please select a user and enter a message or image.");
@@ -19,8 +37,18 @@ const Chat = () => {
     formData.append("text", textMessage);
     formData.append("image", image);
     formData.append("receiver", selectedUser);
+    formData.append("sender", "dchitte@okstate.edu"); // Replace this with actual logged-in user
 
     try {
+      // Send message to the server via Socket.IO
+      socket.emit("send-message", {
+        text: textMessage,
+        imagePath: image ? image.name : null,
+        receiver: selectedUser,
+        sender: "dchitte@okstate.edu", // Replace this with actual logged-in user
+      });
+
+      // Optionally: Save the message in MongoDB via a POST request (if not using socket for persistence)
       const response = await fetch("http://localhost:5001/send-message", {
         method: "POST",
         body: formData,
@@ -28,9 +56,9 @@ const Chat = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setMessages((prevMessages) => [...prevMessages, data.message]);
-        setTextMessage(""); // Clear the input after sending
-        setImage(null); // Clear the image input
+        setMessages((prevMessages) => [...prevMessages, data.message]); // Update message list
+        setTextMessage(""); // Clear text input
+        setImage(null); // Clear image input
       } else {
         console.error("Error sending message:", response.statusText);
       }
@@ -41,13 +69,16 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
-      <ChatSidebar onSelectUser={(user) => setSelectedUser(user)} />
+      {/* Sidebar for recent chats and search */}
+      <ChatSidebar onSelectUser={setSelectedUser} />
 
+      {/* Main chat area */}
       <div className="chat-main">
         <div className="chat-header">
           <h1>{selectedUser ? `Chat with ${selectedUser}` : "Select a user to chat"}</h1>
         </div>
 
+        {/* Displaying messages */}
         <div className="message-container">
           {messages.map((msg, index) => (
             <ChatMessage
@@ -60,7 +91,7 @@ const Chat = () => {
           ))}
         </div>
 
-        {/* Input for text message */}
+        {/* Input area for text and image */}
         <div className="message-input">
           <input
             type="text"
@@ -69,12 +100,13 @@ const Chat = () => {
             onChange={(e) => setTextMessage(e.target.value)}
           />
 
-          {/* Input for image upload */}
+          {/* Image upload input */}
           <input
             type="file"
             onChange={(e) => setImage(e.target.files[0])}
           />
 
+          {/* Send button */}
           <button onClick={handleSendMessage}>Send</button>
         </div>
       </div>
