@@ -1,19 +1,15 @@
 import React from "react";
-import '../CSS/ChatMessage.css'; // Import CSS for styling the component
+import '../CSS/ChatMessage.css';
 
-function ChatMessage({ text, timestamp, voice, sender, videos = [], files = [] }) {
+function ChatMessage({ text, timestamp, sender, currentUser, files = [] }) {
+  const isSentByCurrentUser = sender === currentUser;
+
   return (
-    <div className={`chat-message ${sender === "currentUser@example.com" ? 'from-user' : 'from-other'}`}>
+    <div className={`chat-message ${isSentByCurrentUser ? 'from-user' : 'from-other'}`}>
       <div className="attached-files">
         {files.length > 0 && files.map((file, index) => (
           <div key={index} className="image-cont">
             <img src={file} alt="Attachment" className="image-file" />
-          </div>
-        ))}
-
-        {videos.length > 0 && videos.map((video, index) => (
-          <div key={index} className="video-cont">
-            <video src={video} alt="Video Attachment" className="video-file" controls />
           </div>
         ))}
       </div>

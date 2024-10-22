@@ -7,7 +7,9 @@ function App() {
   return (
     <Router>
       <div className="App">
+        {/* <div>
         <h1 className="app-title">Chat Application</h1>
+        </div> */}
         <Routes>
           <Route path="/" element={<Authentication />} />
           <Route path="/chat" element={<Chat />} />
