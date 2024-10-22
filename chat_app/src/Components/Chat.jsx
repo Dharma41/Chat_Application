@@ -1,112 +1,144 @@
 import React, { useState, useEffect } from "react";
-import ChatMessage from "./ChatMessage"; // Assuming ChatMessage is in the same folder
-import ChatSidebar from "./ChatSidebar"; // Sidebar for recent chats and search bar
-import '../CSS/Chat.css'; // CSS for styling the chat interface
-import { io } from "socket.io-client"; // Import Socket.IO client
+import ChatMessage from "./ChatMessage";
+import ChatSidebar from "./ChatSidebar";
+import '../CSS/Chat.css';
+import { io } from "socket.io-client";
+import { jwtDecode } from "jwt-decode";
+
+const socket = io("http://localhost:5001");
 
 const Chat = () => {
-  const [selectedUser, setSelectedUser] = useState(null); // Store the selected user for chat
-  const [messages, setMessages] = useState([]); // Store the messages for the conversation
-  const [textMessage, setTextMessage] = useState(""); // Input for text message
-  const [image, setImage] = useState(null); // Input for image message
-  const socket = io("http://localhost:5001"); // Connect to the Socket.IO server
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUserName, setSelectedUserName] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [textMessage, setTextMessage] = useState("");
+  const [image, setImage] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  // Load messages and listen for incoming messages
+  // Get the current logged-in user from JWT token
+  const token = localStorage.getItem("token");
+  const currentUser = jwtDecode(token).email; // Use this as the current logged-in user
+
   useEffect(() => {
-    // Listen for incoming messages
+    // Listen for messages from the server
     socket.on("receive-message", (message) => {
-      if (message.receiver === "dchitte@okstate.edu") { // Replace with actual logged-in user
+      if (message.receiver === currentUser || message.sender === currentUser) {
         setMessages((prevMessages) => [...prevMessages, message]);
       }
     });
 
-    // Clean up Socket.IO on component unmount
     return () => {
-      socket.disconnect();
+      socket.off("receive-message");
     };
-  }, [socket]);
+  }, [currentUser]);
 
-  // Function to handle sending the message
   const handleSendMessage = async () => {
     if (!selectedUser || (!textMessage && !image)) {
       alert("Please select a user and enter a message or image.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("text", textMessage);
-    formData.append("image", image);
-    formData.append("receiver", selectedUser);
-    formData.append("sender", "dchitte@okstate.edu"); // Replace this with actual logged-in user
+    // Send message to the server via Socket.IO
+    socket.emit("send-message", {
+      text: textMessage,
+      imagePath: image ? image.name : null,
+      receiver: selectedUser,
+      sender: currentUser,
+    });
+
+    // Clear input fields
+    setTextMessage("");
+    setImage(null);
 
     try {
-      // Send message to the server via Socket.IO
-      socket.emit("send-message", {
-        text: textMessage,
-        imagePath: image ? image.name : null,
-        receiver: selectedUser,
-        sender: "dchitte@okstate.edu", // Replace this with actual logged-in user
-      });
+      const formData = new FormData();
+      formData.append("text", textMessage);
+      formData.append("image", image);
+      formData.append("receiver", selectedUser);
+      formData.append("sender", currentUser);
 
-      // Optionally: Save the message in MongoDB via a POST request (if not using socket for persistence)
-      const response = await fetch("http://localhost:5001/send-message", {
+      await fetch("http://localhost:5001/send-message", {
         method: "POST",
         body: formData,
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setMessages((prevMessages) => [...prevMessages, data.message]); // Update message list
-        setTextMessage(""); // Clear text input
-        setImage(null); // Clear image input
-      } else {
-        console.error("Error sending message:", response.statusText);
-      }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error sending message:", error);
     }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+    setSelectedUserName(user);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/'; // Redirect to login
   };
 
   return (
     <div className="chat-container">
-      {/* Sidebar for recent chats and search */}
-      <ChatSidebar onSelectUser={setSelectedUser} />
+      <ChatSidebar onSelectUser={handleSelectUser} />
 
-      {/* Main chat area */}
       <div className="chat-main">
         <div className="chat-header">
-          <h1>{selectedUser ? `Chat with ${selectedUser}` : "Select a user to chat"}</h1>
+          <div className="left-header">
+            {selectedUser && (
+              <>
+                <img
+                  src={`https://api.dicebear.com/9.x/pixel-art/svg?seed=${selectedUser}`}
+                  alt="User"
+                  className="chat-user-avatar"
+                />
+                <div>
+                  <h3>{selectedUserName}</h3>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
-        {/* Displaying messages */}
         <div className="message-container">
-          {messages.map((msg, index) => (
-            <ChatMessage
-              key={index}
-              text={msg.text}
-              timestamp={msg.timestamp}
-              sender={msg.sender}
-              files={msg.files}
-            />
-          ))}
+          {messages.length > 0 ? (
+            messages.map((msg, index) => (
+              <ChatMessage
+                key={index}
+                text={msg.text}
+                timestamp={msg.timestamp}
+                sender={msg.sender}
+                files={msg.files}
+              />
+            ))
+          ) : (
+            <p className="no-messages">No messages yet. Start the conversation!</p>
+          )}
         </div>
 
-        {/* Input area for text and image */}
         <div className="message-input">
           <input
             type="text"
             placeholder="Type a message..."
             value={textMessage}
             onChange={(e) => setTextMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
 
-          {/* Image upload input */}
+          <label htmlFor="image-upload">
+            <i className="fas fa-paperclip"></i>
+          </label>
           <input
             type="file"
+            id="image-upload"
             onChange={(e) => setImage(e.target.files[0])}
           />
 
-          {/* Send button */}
           <button onClick={handleSendMessage}>Send</button>
         </div>
       </div>
