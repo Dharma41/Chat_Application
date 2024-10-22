@@ -1,28 +1,179 @@
+/* Chat Container */
 .chat-container {
-    display: flex;
-    height: 100vh;
-    background-color: #f2f2f2;
-  }
+  display: flex;
+  height: 100vh; /* Full height */
+  width: 100vw; /* Full width */
+  background-color: #f0f0f0;
   
-  /* Main chat area */
-  .chat-main {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .chat-header {
-    padding: 20px;
-    background-color: #4a4a4a;
-    color: white;
-    text-align: center;
-    font-size: 24px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .message-container {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  
+}
+
+/* Sidebar */
+.chat-sidebar {
+  width: 300px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  height: 100vh; /* Full height */
+}
+
+/* Sidebar Header */
+.chat-sidebar-header {
+  padding: 10px;
+  background-color: #075e54;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-sidebar-header .profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.chat-sidebar-header .chat-search-bar {
+  padding: 8px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background-color: #f0f0f0;
+  flex-grow: 1;
+  margin-left: 15px;
+}
+
+/* Chat Main Section */
+.chat-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ece5dd;
+}
+
+/* Chat Header (Top Bar) */
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #075e54;
+  color: white;
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+}
+
+.chat-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* Aligning Search Bar and Profile Info */
+.right-header {
+  display: flex;
+  align-items: center;
+}
+
+.chat-user-info h3 {
+  margin: 0;
+  color: white;
+}
+
+.menu i {
+  cursor: pointer;
+}
+
+/* Message Area */
+.message-container {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #e5ddd5;
+  background-image: url('../Assets/chatImage.png'); /* Set the background image */
+  background-size: cover; /* Make sure the image covers the entire container */
+  background-position: center; /* Center the image */
+  background-repeat: repeat; /* Prevent the image from repeating */
+}
+
+
+/* Bottom Message Input */
+.message-input {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-top: 1px solid #ddd;
+}
+
+.message-input input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  margin-right: 10px;
+}
+
+.message-input input[type="file"] {
+  display: none;
+}
+
+.message-input label {
+  background-color: #34b7f1;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.message-input button {
+  background-color: #075e54;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.message-input button:hover {
+  background-color: #128c7e;
+}
+/* Positioning for the three dots beside the search bar */
+.three-dots {
+  position: relative;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 24px;
+  color: white;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  width: 100px;
+}
+
+.dropdown-menu p {
+  padding: 10px;
+  margin: 0;
+  cursor: pointer;
+  text-align: center;
+  color: black;
+  font-size: small;
+}
+
+.dropdown-menu p:hover {
+  background-color: #f0f0f0;
+}

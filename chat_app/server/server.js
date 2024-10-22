@@ -52,6 +52,8 @@ const UserSchema = new mongoose.Schema({
   googleId: { type: String }, // For storing Google ID for users who authenticate via Google
 });
 
+
+
 const User = mongoose.model('User', UserSchema);
 
 // Google OAuth setup
@@ -134,6 +136,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
+
 // Google OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
@@ -156,35 +159,22 @@ app.get('/logout', (req, res) => {
   });
 });
 
-// Socket.IO event handlers
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  // Handle message sending
-  socket.on('send-message', async (messageData) => {
-    const { text, receiver, sender, imagePath } = messageData;
+  // Handle incoming messages
+  socket.on('send-message', (messageData) => {
+    const { text, receiver, sender } = messageData;
 
-    try {
-      // Save message to the database
-      const message = await Message.create({
-        text,
-        imagePath,
-        receiver,
-        sender,
-        timestamp: new Date(),
-      });
-
-      // Emit the message to all connected clients
-      io.emit('receive-message', message); // Broadcast message to all clients
-    } catch (err) {
-      console.error('Error saving message:', err);
-    }
+    // Broadcast the message to all connected clients
+    io.emit('receive-message', messageData); // This will emit the message to all connected clients, including the sender
   });
 
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
   });
 });
+
 
 // Fetch users route for search functionality
 app.get('/users', async (req, res) => {
