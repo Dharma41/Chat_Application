@@ -9,44 +9,46 @@ const Authentication = () => {
   const [isRegister, setIsRegister] = useState(false); // Toggle between login and register
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(false); // Track registration success
   const navigate = useNavigate();
- 
-  // Inside your Authentication component
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError('');
-  setLoading(true);
 
-  try {
-    const endpoint = isRegister ? 'register' : 'login';
-    const response = await fetch(`http://localhost:5001/${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-    const data = await response.json();
-    if (data.success) {
-      // Store the JWT token in localStorage
-      localStorage.setItem('token', data.token);
+    try {
+      const endpoint = isRegister ? 'register' : 'login';
+      const response = await fetch(`http://localhost:5001/${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Navigate to the chat page upon successful registration or login
-      navigate('/chat');
-    } else {
-      setError(data.message || 'Error: Please check your credentials.');
+      const data = await response.json();
+      if (data.success) {
+        if (isRegister) {
+          // If registration is successful, show the success message
+          setRegisterSuccess(true); 
+          setIsRegister(false); // Switch back to login form
+        } else {
+          // If login is successful, navigate to the chat page
+          localStorage.setItem('token', data.token);
+          navigate('/chat');
+        }
+      } else {
+        setError(data.message || 'Error: Please check your credentials.');
+      }
+    } catch (error) {
+      setError('Server error. Please try again later.');
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    setError('Server error. Please try again later.');
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   const handleGoogleLogin = () => {
     window.location.href = 'http://localhost:5001/auth/google';
   };
-  
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -60,6 +62,9 @@ const handleSubmit = async (e) => {
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>
+        {/* Show success message after registration */}
+        {registerSuccess && <p className="success-message">Successfully created. Please login.</p>}
+        
         <h1>{isRegister ? 'Create Account' : 'Login'}</h1>
         
         <label htmlFor="email">Email:</label>
@@ -101,13 +106,6 @@ const handleSubmit = async (e) => {
           {isRegister ? 'Login Instead' : 'Create an Account'}
           </span>
         </button>
-
-        {/* <p className="toggle-auth">
-          {isRegister ? 'Already have an account?' : 'Need an account?'}
-          <span onClick={() => setIsRegister(!isRegister)}>
-            {isRegister ? 'Login here' : 'Register here'}
-          </span>
-        </p> */}
       </form>
     </div>
   );
