@@ -156,3 +156,14 @@ body, html {
   color: #007bff;
   cursor: pointer;
 }
+.success-message {
+  color: green;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
