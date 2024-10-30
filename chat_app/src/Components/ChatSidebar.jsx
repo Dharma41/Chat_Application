@@ -4,7 +4,8 @@ import "../CSS/ChatSidebar.css"; // Ensure you are importing the correct CSS fil
 const ChatSidebar = ({ onSelectUser }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [recentChats, setRecentChats] = useState(["aparna@okstate.edu", "dchitte@okstate.edu"]);
+  const [recentChats, setRecentChats] = useState([]);
+  // "dchitte@okstate.edu"
   const [loading, setLoading] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false); // State for showing dropdown menu
