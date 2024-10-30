@@ -1,21 +1,30 @@
+/* Main container for both sidebar and chat */
+.chat-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #e5ddd5; /* Soft background for chat area */
+}
+
 /* Sidebar container */
 .chat-sidebar {
-  width: 300px; /* Fixed width for the sidebar */
+  width: 300px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
-  height: 100vh; /* Full height */
 }
 
 /* Sidebar header (profile and search) */
 .chat-sidebar-header {
-  padding: 20px;
+  padding: 15px 20px;
   background-color: #075e54;
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 60px; /* Fixed height for consistent alignment */
+  box-sizing: border-box;
 }
 
 .chat-sidebar-header .profile-pic {
@@ -23,16 +32,49 @@
   height: 40px;
   border-radius: 50%;
   border: 2px solid white;
+  margin-right: 10px;
 }
 
 .chat-sidebar-header .chat-search-bar {
   flex-grow: 1;
-  padding: 10px;
-  margin-left: 15px;
+  padding: 8px 12px;
   border-radius: 20px;
   border: none;
   outline: none;
   background-color: #f0f0f0;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Three dots dropdown for settings (aligned to the right) */
+.three-dots {
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu p {
+  margin: 0;
+  padding: 8px;
+  cursor: pointer;
+  color: #075e54;
+}
+
+.dropdown-menu p:hover {
+  background-color: #f0f0f0;
+  border-radius: 5px;
 }
 
 /* Recent chats container */
@@ -42,13 +84,26 @@
 }
 
 .recent-chat {
-  padding: 15px;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
   cursor: pointer;
   border-bottom: 1px solid #f0f0f0;
 }
 
+.recent-chat-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
 .recent-chat:hover {
   background-color: #f1f1f1;
+}
+
+.recent-chat p {
+  margin: 0;
 }
 
 /* Sidebar footer for settings */
@@ -63,36 +118,3 @@
   width: 30px;
   height: 30px;
 }
-/* Sidebar Header (Profile and Search) */
-.chat-sidebar-header .profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-/* Recent chat avatar */
-.recent-chat-avatar {
-  width: 30px; /* Smaller size */
-  height: 30px; /* Smaller size */
-  border-radius: 50%; /* Make it circular */
-  margin-right: 10px; /* Space between the image and name */
-}
-
-/* Sidebar Recent Chat */
-.recent-chat {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.recent-chat:hover {
-  background-color: #f1f1f1;
-}
-
-.recent-chat p {
-  margin: 0;
-}
-

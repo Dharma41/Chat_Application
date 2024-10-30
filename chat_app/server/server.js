@@ -8,30 +8,27 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import session from 'express-session';
 import multer from 'multer';
-import { createServer } from 'http'; // To create HTTP server for Socket.IO
-import { Server } from 'socket.io'; // Import Socket.IO server
-import Message from './models/Message.js'; // Import Message model
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import Message from './models/Message.js';
+import User from './models/User.js';
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
-const httpServer = createServer(app); // Create an HTTP server for Socket.IO
+const httpServer = createServer(app);
 
-// Initialize Socket.IO with the HTTP server
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000', // Allow connection from your frontend
+    origin: 'http://localhost:3000',
   }
 });
 
-const upload = multer({ dest: 'uploads/' }); // Configure multer to handle file uploads
+const upload = multer({ dest: 'uploads/' });
 
-// Middleware
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:3000', optionsSuccessStatus: 200 }));
 
-// Session setup for passport
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -40,7 +37,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// MongoDB connection
 mongoose.connect('mongodb://localhost:27017/chat-app')
   .then(() => console.log('MongoDB connected'))
   .catch((error) => console.error('MongoDB connection error:', error));
@@ -53,7 +49,7 @@ const UserSchema = new mongoose.Schema({
   googleId: { type: String }, // For storing Google ID for users who authenticate via Google
 });
 
-const User = mongoose.model('User', UserSchema);
+// const User = mongoose.model('User', UserSchema);
 
 // Google OAuth setup
 passport.use(new GoogleStrategy({
@@ -164,39 +160,33 @@ const users = {}; // To store users and their socket IDs
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  // Register the user with their socket ID
   socket.on('register-user', (username) => {
     users[username] = socket.id;
     console.log(`User registered: ${username}`);
   });
 
-  // Handle incoming messages
   socket.on('send-message', async (messageData) => {
-    const { text, receiver, sender } = messageData;
-
-    // Save the message to the database
+    const { text, receiver, sender, imagePath } = messageData;
     try {
       const message = await Message.create({
         text,
+        imagePath,
         receiver,
         sender,
         timestamp: new Date(),
       });
 
-      // Send message to the specific receiver
       const receiverSocket = users[receiver];
       if (receiverSocket) {
         io.to(receiverSocket).emit('receive-message', message);
       }
     } catch (error) {
-      console.error('Error saving message:', error);
+      console.error('Error sending message:', error);
     }
   });
 
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-
-    // Remove the user from the users list
     for (let username in users) {
       if (users[username] === socket.id) {
         delete users[username];
@@ -206,18 +196,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Fetch users route for search functionality
-app.get('/users', async (req, res) => {
-  const { search } = req.query;
-  try {
-    const users = await User.find({ username: { $regex: search, $options: 'i' } });
-    res.status(200).json(users.map(user => user.username));
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// Send message route for file uploads
 app.post('/send-message', upload.single('image'), async (req, res) => {
   const { text, receiver, sender } = req.body;
   const imagePath = req.file ? req.file.path : null;
@@ -237,14 +215,25 @@ app.post('/send-message', upload.single('image'), async (req, res) => {
     }
 
     res.status(201).json({ success: true, message });
-  } catch (err) {
-    console.error('Error saving message:', err);
+  } catch (error) {
+    console.error('Error saving message:', error);
     res.status(500).json({ error: 'Failed to send message' });
   }
 });
 
-// Start the server
+app.get('/users', async (req, res) => {
+  const { search } = req.query;
+  try {
+    const users = await User.find({ username: { $regex: search, $options: 'i' } });
+    res.status(200).json(users.map(user => user.username));
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 const PORT = process.env.PORT || 5001;
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
