@@ -255,7 +255,11 @@ import { Server } from 'socket.io';
 import Message from './models/Message.js';
 import User from './models/User.js';
 
+
+
+
 dotenv.config();
+
 
 const app = express();
 const httpServer = createServer(app);
@@ -385,13 +389,13 @@ app.get('/logout', (req, res) => {
 });
 
 // Serve frontend static files in production
-if (process.env.NODE_ENV === 'production') {
-  const frontendPath = path.join(__dirname, '../frontend/build');
-  app.use(express.static(frontendPath));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(frontendPath, 'index.html'));
-  });
-}
+// if (process.env.NODE_ENV === 'production') {
+//   const frontendPath = path.join(__dirname, '../frontend/build');
+//   app.use(express.static(frontendPath));
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(frontendPath, 'index.html'));
+//   });
+// }
 
 // WebSockets for real-time messaging
 const users = {};
