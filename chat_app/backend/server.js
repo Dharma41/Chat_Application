@@ -84,6 +84,12 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+//To test for backend sever
+
+app.get('/', (req, res) => {
+  res.send('Backend is running after deplyment!');
+});
+
 // Register route
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
