@@ -143,7 +143,7 @@ import {jwtDecode} from "jwt-decode" // Corrected import for jwt-decode
 import { io } from "socket.io-client";
 
 // Connect to the backend using an environment variable
-const socket = io(process.env.REACT_APP_SERVER_URL);
+const socket = io(process.env.REACT_APP_SERVER_URL, { transports: ["websocket"] });
 
 const Chat = () => {
   const [selectedUser, setSelectedUser] = useState(null);

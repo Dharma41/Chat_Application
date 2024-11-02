@@ -267,7 +267,7 @@ const io = new Server(httpServer, {
   cors: {
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"],
-    credentials: true
+    // credentials: true
   }
 });
 
@@ -403,17 +403,29 @@ app.get('/logout', (req, res) => {
 const users = {};
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
-  socket.on('register-user', (username) => { users[username] = socket.id; });
+
+  socket.on('register-user', (username) => {
+    users[username] = socket.id;
+    socket.username = username; // Store username in socket for disconnect handling
+  });
+
   socket.on('send-message', async (messageData) => {
     const { text, receiver, sender, imagePath } = messageData;
     try {
       const message = await Message.create({ text, imagePath, receiver, sender, timestamp: new Date() });
       const receiverSocket = users[receiver];
       if (receiverSocket) io.to(receiverSocket).emit('receive-message', message);
-    } catch (error) { console.error('Error sending message:', error); }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   });
-  socket.on('disconnect', () => { delete users[socket.username]; });
-});
 
+  socket.on('disconnect', () => {
+    if (socket.username) {
+      delete users[socket.username];
+    }
+    console.log('User disconnected:', socket.id);
+  });
+});
 const PORT = process.env.PORT || 5001;
 httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));
