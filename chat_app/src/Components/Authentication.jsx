@@ -76,7 +76,7 @@ const Authentication = () => {
         <h1>{isRegister ? 'Create Account' : 'Login'}</h1>
 
         {/* Username Field - required for both registration and login */}
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="username"></label>
         <input
           type="text"
           id="username"
@@ -89,7 +89,7 @@ const Authentication = () => {
         {/* Email Field - required only for registration */}
         {isRegister && (
           <>
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email"></label>
             <input
               type="email"
               id="email"
@@ -102,7 +102,7 @@ const Authentication = () => {
         )}
 
         {/* Password Field */}
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password"></label>
         <input
           type="password"
           id="password"
