@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import ChatSidebar from "./ChatSidebar";
 import '../CSS/Chat.css';
-import {jwtDecode} from "jwt-decode";
 import { io } from "socket.io-client";
 
 const socket = io("http://localhost:5001");
@@ -14,8 +13,7 @@ const Chat = () => {
   const [textMessage, setTextMessage] = useState("");
   const [image, setImage] = useState(null);
   
-  const token = localStorage.getItem("token");
-  const currentUser = jwtDecode(token).username; // Make sure the JWT contains 'username'
+  const currentUser = localStorage.getItem("username"); // Make sure the JWT contains 'username'
 
   useEffect(() => {
     // Register current user with the server

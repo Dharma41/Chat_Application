@@ -53,6 +53,7 @@ const Authentication = () => {
       setError('Please enter a username to continue with Google.');
       return;
     }
+    localStorage.setItem('token', username);
     localStorage.setItem('username', username);
     window.location.href = 'http://localhost:5001/auth/google';
   };
