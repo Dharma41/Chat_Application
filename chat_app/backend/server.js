@@ -93,16 +93,21 @@ app.get('/', (req, res) => {
 // Register route
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
-
   try {
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    // Check if username or email already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      return res.status(400).json({ success: false, message: 'Username or email already exists' });
+      return res.status(400).json({
+        success: false,
+        message: 'Username or email already exists'
+      });
     }
 
+    // Hash the password and create a new user
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
+
     res.status(201).json({ success: true });
   } catch (error) {
     console.error('Registration failed:', error);
