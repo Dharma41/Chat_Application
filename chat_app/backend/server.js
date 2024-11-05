@@ -41,35 +41,58 @@ app.use(passport.session());
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000,
 })
   .then(() => console.log('MongoDB connected to Atlas'))
   .catch((error) => console.error('MongoDB connection error:', error));
 
-// Google OAuth setup
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5001/auth/google/callback'
-},
-async (accessToken, refreshToken, profile, done) => {
-  try {
-    const username = profile.displayName;
-    const existingUser = await User.findOne({ googleId: profile.id });
-    if (existingUser) {
-      return done(null, existingUser);
+  passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:5001/auth/google/callback'
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      const email = profile.emails[0].value;
+      let username = profile.displayName;
+  
+      // Check if a user with this Google ID already exists
+      let user = await User.findOne({ googleId: profile.id });
+  
+      if (!user) {
+        // Check if the username is already in use
+        let existingUsername = await User.findOne({ username });
+  
+        // Generate a unique username if necessary
+        while (existingUsername) {
+          const randomSuffix = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+          username = `${profile.displayName}_${randomSuffix}`;
+          existingUsername = await User.findOne({ username: username });
+        }
+  
+        // Check if email is already in use with a different account
+        const existingEmailUser = await User.findOne({ email });
+        if (existingEmailUser) {
+          // Link Google ID to the existing user account with the same email
+          existingEmailUser.googleId = profile.id;
+          await existingEmailUser.save();
+          user = existingEmailUser;
+        } else {
+          // Create a new user with a unique username and the provided Google email
+          user = new User({
+            username,
+            email,
+            googleId: profile.id
+          });
+          await user.save();
+        }
+      }
+      return done(null, user);
+    } catch (error) {
+      return done(error, null);
     }
-
-    const newUser = new User({
-      username,
-      email: profile.emails[0].value,
-      googleId: profile.id
-    });
-    await newUser.save();
-    return done(null, newUser);
-  } catch (error) {
-    return done(error, null);
-  }
-}));
+  }));
+  
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -95,20 +118,30 @@ app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-    if (existingUser) {
-      return res.status(400).json({ success: false, message: 'Username or email already exists' });
+    // Check if the username already exists
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(400).json({ success: false, message: 'Username already exists' });
     }
 
+    // Check if the email already exists
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ success: false, message: 'Email already exists' });
+    }
+
+    // Hash the password and create a new user if validations pass
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
+
     res.status(201).json({ success: true });
   } catch (error) {
     console.error('Registration failed:', error);
     res.status(500).json({ success: false, message: 'Registration failed' });
   }
 });
+
 
 // Login route
 app.post('/login', async (req, res) => {
