@@ -25,7 +25,7 @@ const io = new Server(httpServer, {
 });
 
 const upload = multer({ dest: 'uploads/' });
-
+app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:3000', optionsSuccessStatus: 200 }));
 
@@ -231,7 +231,7 @@ io.on('connection', (socket) => {
 
 app.post('/send-message', upload.single('image'), async (req, res) => {
   const { text, receiver, sender } = req.body;
-  const imagePath = req.file ? req.file.path : null;
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   try {
     const message = await Message.create({
