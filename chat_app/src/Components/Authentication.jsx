@@ -36,6 +36,7 @@ const Authentication = () => {
           setIsRegister(false); // Switch back to login form
         } else {
           localStorage.setItem('token', data.token);
+          localStorage.setItem('username', username);
           navigate('/chat');
         }
       } else {
@@ -64,7 +65,7 @@ const Authentication = () => {
     const username = localStorage.getItem('username'); // Retrieve the username set before Google login
     if (token && username) {
       localStorage.setItem('token', token);
-      localStorage.removeItem('username'); // Clear temporary username after login
+     // localStorage.removeItem('username'); // Clear temporary username after login
       navigate('/chat');
     }
   }, [navigate]);
