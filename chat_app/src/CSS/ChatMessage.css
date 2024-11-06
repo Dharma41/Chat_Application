@@ -91,3 +91,22 @@
   margin-top: 5px;
   text-align: right;
 }
+
+.media-file {
+  max-width: 100%;
+  max-height: 300px;
+  margin-top: 8px;
+  border-radius: 8px;
+}
+
+.media-container {
+  margin-bottom: 8px;
+}
+.image-cont {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.image-cont:hover {
+  transform: scale(1.05);
+}
