@@ -19,10 +19,18 @@ To run the Chat Application locally, follow these steps:
    ```bash
    npm start
    ```
-6. Access the application in your web browser at `http://localhost:8000`.
+6. Access the application in your web browser at `http://localhost:3000`.
 
 Dependies
    
   npm install socket.io socket.io-client
+
+To run backend server:
+
+1.Navigate to the project directory:
+  cd chat_app/backend
+2.Start the server:
+  node sever.js
+  
 
 
