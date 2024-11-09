@@ -13,7 +13,7 @@ const Chat = () => {
   const [textMessage, setTextMessage] = useState("");
   const [image, setImage] = useState(null);
   const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
-  
+
   const currentUser = localStorage.getItem("username");
 
   useEffect(() => {
@@ -27,6 +27,23 @@ const Chat = () => {
       socket.off("receive-message");
     };
   }, [currentUser]);
+
+  // Fetch 24-hour messages for the selected user
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (selectedUser) {
+        try {
+          const response = await fetch(`http://localhost:5001/messages?sender=${currentUser}&receiver=${selectedUser}`);
+          const data = await response.json();
+          setMessages(data);
+        } catch (error) {
+          console.error("Error fetching messages:", error);
+        }
+      }
+    };
+
+    fetchMessages();
+  }, [selectedUser, currentUser]);
 
   useEffect(() => {
     if (selectedUser) {

@@ -1,16 +1,18 @@
+// models/Message.js
+
 import mongoose from 'mongoose';
 
-const MessageSchema = new mongoose.Schema({
-  text: { type: String },
-  imagePath: { type: String },
-  receiver: { type: String, required: true },
-  sender: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now },
+const messageSchema = new mongoose.Schema({
+  text: String,
+  sender: String,
+  receiver: String,
+  imagePath: String,
+  timestamp: Date,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 86400 // Automatically delete messages 24 hours after creation
+  }
 });
 
-// Set TTL index to automatically delete messages older than 24 hours
-MessageSchema.index({ timestamp: 1 }, { expireAfterSeconds: 86400 });
-
-const Message = mongoose.model('Message', MessageSchema);
-
-export default Message;
+export default mongoose.model('Message', messageSchema);

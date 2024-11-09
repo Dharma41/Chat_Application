@@ -264,6 +264,24 @@ app.get('/users', async (req, res) => {
   }
 });
 
+// Fetch messages between two users (server-side filtering)
+app.get('/messages', async (req, res) => {
+  const { sender, receiver } = req.query;
+
+  try {
+    const messages = await Message.find({
+      $or: [
+        { sender, receiver },
+        { sender: receiver, receiver: sender }
+      ],
+      createdAt: { $gte: new Date(Date.now() - 86400 * 1000) } // Only fetch messages from the past 24 hours
+    });
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
 const PORT = process.env.PORT || 5001;
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
