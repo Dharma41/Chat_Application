@@ -20,14 +20,14 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
   }
 });
 
 const upload = multer({ dest: 'uploads/' });
 app.use('/uploads', express.static('uploads'));
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000', optionsSuccessStatus: 200 }));
+app.use(cors({ origin: process.env.FRONTEND_URL, optionsSuccessStatus: 200 }));
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -49,7 +49,7 @@ mongoose.connect(process.env.MONGO_URI, {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:5001/auth/google/callback'
+    callbackURL: `${process.env.REACT_APP_SERVER_URL}/auth/google/callback`
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
@@ -173,7 +173,7 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     const token = jwt.sign({ id: req.user._id, username: req.user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.redirect(`http://localhost:3000/chat?token=${token}`);
+    res.redirect(`${process.env.FRONTEND_URL}/chat?token=${token}`);
   }
 );
 

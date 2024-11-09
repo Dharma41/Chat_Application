@@ -23,7 +23,9 @@ const Authentication = () => {
       const payload = isRegister 
         ? { username, email, password }
         : { username, password };
-      const response = await fetch(`http://localhost:5001/${endpoint}`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/${endpoint}`, {
+
+      // const response = await fetch(`http://localhost:5001/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -59,7 +61,7 @@ const Authentication = () => {
     }
     localStorage.setItem('token', username);
     localStorage.setItem('username', username);
-    window.location.href = 'http://localhost:5001/auth/google';
+    window.location.href = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
   };
 
   useEffect(() => {

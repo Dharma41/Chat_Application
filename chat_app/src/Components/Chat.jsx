@@ -4,7 +4,7 @@ import ChatSidebar from "./ChatSidebar";
 import "../CSS/Chat.css";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5001");
+const socket = io(process.env.REACT_APP_SERVER_URL);
 
 const Chat = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -28,12 +28,11 @@ const Chat = () => {
     };
   }, [currentUser]);
 
-  // Fetch 24-hour messages for the selected user
   useEffect(() => {
     const fetchMessages = async () => {
       if (selectedUser) {
         try {
-          const response = await fetch(`http://localhost:5001/messages?sender=${currentUser}&receiver=${selectedUser}`);
+          const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/messages?sender=${currentUser}&receiver=${selectedUser}`);
           const data = await response.json();
           setMessages(data);
         } catch (error) {
@@ -70,7 +69,7 @@ const Chat = () => {
     formData.append("sender", currentUser);
 
     try {
-      const response = await fetch("http://localhost:5001/send-message", {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/send-message`, {
         method: "POST",
         body: formData,
       });
@@ -156,7 +155,6 @@ const Chat = () => {
         </div>
       </div>
 
-      {/* Attachment Preview Modal */}
       {showAttachmentPreview && (
         <div className="attachment-preview-modal">
           <div className="attachment-preview-content">

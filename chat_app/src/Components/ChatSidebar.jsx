@@ -13,7 +13,7 @@ const ChatSidebar = ({ onSelectUser }) => {
 
   const currentUser = {
     username: localStorage.getItem("username"),
-    email: localStorage.getItem("email"), // Get the email from localStorage
+    email: localStorage.getItem("email"),
   };
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ChatSidebar = ({ onSelectUser }) => {
 
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5001/users?search=${searchQuery}`);
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users?search=${searchQuery}`);
         const data = await response.json();
         setSearchResults(data);
         setNoResults(data.length === 0);
@@ -117,7 +117,6 @@ const ChatSidebar = ({ onSelectUser }) => {
           ))}
       </div>
 
-      {/* Profile Modal */}
       {showProfileModal && (
         <ProfileModal
           isOpen={showProfileModal}

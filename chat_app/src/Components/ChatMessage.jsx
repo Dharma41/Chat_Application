@@ -7,8 +7,10 @@ function ChatMessage({ text, timestamp, sender, currentUser, files = [] }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const isSentByCurrentUser = sender === currentUser;
 
+  const serverUrl = process.env.REACT_APP_SERVER_URL; // Retrieve the server URL from the environment variable
+
   const handleImageClick = (file) => {
-    setSelectedImage(`http://localhost:5001${file}`);
+    setSelectedImage(`${serverUrl}${file}`);
     setIsModalOpen(true);
   };
 
@@ -22,7 +24,7 @@ function ChatMessage({ text, timestamp, sender, currentUser, files = [] }) {
       <div className="attached-files">
         {files.length > 0 && files.map((file, index) => (
           <div key={index} className="image-cont" onClick={() => handleImageClick(file)}>
-            <img src={`http://localhost:5001${file}`} alt="Attachment" className="image-file" />
+            <img src={`${serverUrl}${file}`} alt="Attachment" className="image-file" />
           </div>
         ))}
       </div>
