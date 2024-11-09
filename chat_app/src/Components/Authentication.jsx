@@ -37,7 +37,9 @@ const Authentication = () => {
         } else {
           localStorage.setItem('token', data.token);
           localStorage.setItem('username', username);
-          localStorage.setItem('email', email); // Store email in localStorage
+          if (isRegister) {
+            localStorage.setItem('email', email);
+          }
           navigate('/chat');
         }
       } else {
