@@ -37,6 +37,7 @@ const Authentication = () => {
         } else {
           localStorage.setItem('token', data.token);
           localStorage.setItem('username', username);
+          localStorage.setItem('email', email); // Store email in localStorage
           navigate('/chat');
         }
       } else {
@@ -62,10 +63,10 @@ const Authentication = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
-    const username = localStorage.getItem('username'); // Retrieve the username set before Google login
+    const username = localStorage.getItem('username');
+    const email = localStorage.getItem('email'); // Retrieve the email if set previously
     if (token && username) {
       localStorage.setItem('token', token);
-     // localStorage.removeItem('username'); // Clear temporary username after login
       navigate('/chat');
     }
   }, [navigate]);
@@ -77,7 +78,6 @@ const Authentication = () => {
         
         <h1>{isRegister ? 'Create Account' : 'Login'}</h1>
 
-        {/* Username Field - required for both registration and login */}
         <label htmlFor="username"></label>
         <input
           type="text"
@@ -88,7 +88,6 @@ const Authentication = () => {
           required
         />
 
-        {/* Email Field - required only for registration */}
         {isRegister && (
           <>
             <label htmlFor="email"></label>
@@ -103,7 +102,6 @@ const Authentication = () => {
           </>
         )}
 
-        {/* Password Field */}
         <label htmlFor="password"></label>
         <input
           type="password"

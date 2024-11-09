@@ -1,7 +1,6 @@
-// ChatSidebar.jsx
 import React, { useState, useEffect } from "react";
 import "../CSS/ChatSidebar.css";
-import ProfileModal from "./ProfileModal"; // Import the ProfileModal component
+import ProfileModal from "./ProfileModal";
 
 const ChatSidebar = ({ onSelectUser }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -10,11 +9,11 @@ const ChatSidebar = ({ onSelectUser }) => {
   const [loading, setLoading] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false); // State to control profile modal visibility
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const currentUser = {
     username: localStorage.getItem("username"),
-    //email: "user@example.com", // Replace with actual user email from your auth system if available
+    email: localStorage.getItem("email"), // Get the email from localStorage
   };
 
   useEffect(() => {
@@ -56,6 +55,8 @@ const ChatSidebar = ({ onSelectUser }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
     window.location.href = "/";
   };
 
@@ -84,7 +85,6 @@ const ChatSidebar = ({ onSelectUser }) => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         
-        {/* Three dots dropdown */}
         <div className="three-dots" onClick={toggleDropdown}>
           <span>⋮</span>
           {showDropdown && (
@@ -124,7 +124,7 @@ const ChatSidebar = ({ onSelectUser }) => {
           onClose={() => setShowProfileModal(false)}
           profile={{
             username: currentUser.username,
-            // email: currentUser.email,
+            email: currentUser.email,
             avatar: generateAvatar(currentUser.username),
           }}
         />

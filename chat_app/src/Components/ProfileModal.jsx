@@ -10,7 +10,7 @@ function ProfileModal({ isOpen, onClose, profile }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img src={profile.avatar} alt="Profile" className="profile-modal-avatar" />
         <h2>{profile.username}</h2>
-        {/* <p>{profile.email}</p> */}
+        <p>{profile.email}</p>
         
         <button onClick={onClose} className="close-button">Close</button>
       </div>
