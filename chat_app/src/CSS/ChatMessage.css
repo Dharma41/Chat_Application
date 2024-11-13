@@ -110,3 +110,82 @@
 .image-cont:hover {
   transform: scale(1.05);
 }
+/* Chat message bubble styling */
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  max-width: 60%; /* Limit width for readability */
+  padding: 10px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word; /* Allows long words or URLs to break to the next line */
+  overflow-wrap: break-word; /* Ensures long text breaks */
+  box-sizing: border-box;
+}
+
+/* From-user messages align to the right */
+.from-user {
+  align-self: flex-end;
+  background-color: #DCF8C6;
+  color: #333;
+  text-align: right;
+  border-radius: 8px 8px 0 8px;
+  max-width: 80vw; /* Responsive width */
+}
+
+/* From-other messages align to the left */
+.from-other {
+  align-self: flex-start;
+  background-color: #FFFFFF;
+  color: #333;
+  text-align: left;
+  border-radius: 8px 8px 8px 0;
+  max-width: 80vw; /* Responsive width */
+}
+
+/* Adjust attached files to avoid overflow */
+.attached-files {
+  display: flex;
+  flex-wrap: wrap; /* Allows images to wrap to a new line if necessary */
+  gap: 5px;
+  margin-top: 5px;
+}
+
+/* Image container hover effect */
+.image-cont {
+  max-width: 120px;
+  max-height: 120px;
+  overflow: hidden;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.image-cont:hover {
+  transform: scale(1.05);
+}
+
+/* Message text styling to contain text within the bubble */
+.message-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4;
+  word-break: break-word; /* Ensures that long text, like links, breaks within the bubble */
+}
+
+/* Message timestamp styling */
+.message-date {
+  font-size: 12px;
+  color: #888;
+  margin-top: 5px;
+  text-align: right;
+}
+
+/* Media file styling */
+.media-file {
+  max-width: 100%;
+  max-height: 300px;
+  margin-top: 8px;
+  border-radius: 8px;
+}
