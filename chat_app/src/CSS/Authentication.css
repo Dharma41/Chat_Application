@@ -5,10 +5,10 @@ body, html {
   padding: 0;
   font-family: 'Arial', sans-serif;
   background-image: linear-gradient(
-      rgba(230, 230, 255, 0.8),
-      rgba(230, 230, 255, 0.7)
+      rgba(145, 219, 97, 0.8),
+      rgba(18, 193, 76, 0.7)
     ),
-    url('../Assets/background2.jpg'); /* Replace with actual background image */
+    url('../Assets/background.png'); /* Replace with actual background image */
   background-repeat: repeat;
   background-position: center;
 }
