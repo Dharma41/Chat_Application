@@ -13,6 +13,8 @@ const Chat = () => {
   const [textMessage, setTextMessage] = useState("");
   const [image, setImage] = useState(null);
   const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
+  const [welcomeMessage, setWelcomeMessage] = useState("Welcome to Chat App");
+
 
   const currentUser = localStorage.getItem("username");
 
@@ -96,7 +98,7 @@ const Chat = () => {
 
   const handleSelectUser = (user) => {
     setSelectedUser(user);
-  };
+      };
 
   const handleImageSelect = (event) => {
     const file = event.target.files[0];
@@ -113,27 +115,33 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
-      <ChatSidebar onSelectUser={handleSelectUser} />
-      <div className="chat-main">
+     <ChatSidebar onSelectUser={handleSelectUser} />
+            <div className="chat-main">
         <div className="chat-header">
           {selectedUser && <h3>Chat with {selectedUser}</h3>}
         </div>
+        
         <div className="message-container">
-          {filteredMessages.length > 0 ? (
-            filteredMessages.map((msg, index) => (
-              <ChatMessage
-                key={index}
-                text={msg.text}
-                timestamp={msg.timestamp}
-                sender={msg.sender}
-                files={msg.imagePath ? [msg.imagePath] : []}
-                currentUser={currentUser}
-              />
-            ))
+          {selectedUser ? (
+            filteredMessages.length > 0 ? (
+              filteredMessages.map((msg, index) => (
+                <ChatMessage
+                  key={index}
+                  text={msg.text}
+                  timestamp={msg.timestamp}
+                  sender={msg.sender}
+                  files={msg.imagePath ? [msg.imagePath] : []}
+                  currentUser={currentUser}
+                />
+              ))
+            ) : (
+              <p className="no-messages">No messages with this user yet. Start the conversation!</p>
+            )
           ) : (
-            <p className="no-messages">No messages with this user yet. Start the conversation!</p>
+            <p className="welcome-message">{welcomeMessage}</p>
           )}
         </div>
+        
         <div className="message-input">
           <input
             type="text"

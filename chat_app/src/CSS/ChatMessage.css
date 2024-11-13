@@ -3,7 +3,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: #e5ddd5;
+  background-color: #21b20e;
   padding: 0;
   overflow-y: auto;
   box-sizing: border-box;
@@ -16,7 +16,7 @@
   align-items: center;
   padding: 0 20px;
   background-color: #075e54;
-  color: white;
+  color: rgb(171, 24, 24);
   font-size: 18px;
   box-sizing: border-box;
 }
@@ -51,7 +51,7 @@
 
 .from-other {
   align-self: flex-start;
-  background-color: #FFFFFF;
+  background-color: #1bc02f;
   color: #333;
   text-align: left;
   border-radius: 8px 8px 8px 0;
@@ -137,7 +137,7 @@
 /* From-other messages align to the left */
 .from-other {
   align-self: flex-start;
-  background-color: #FFFFFF;
+  background-color: #48c115;
   color: #333;
   text-align: left;
   border-radius: 8px 8px 8px 0;

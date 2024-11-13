@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: hidden;
 }
 
 /* Sidebar header (profile and search) */
@@ -63,6 +64,8 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+  color: #333;
+  z-index: 1;
 }
 
 .dropdown-menu p {
@@ -83,12 +86,15 @@
   overflow-y: auto;
 }
 
+/* Recent chat item styling */
 .recent-chat {
   display: flex;
   align-items: center;
   padding: 10px 20px;
   cursor: pointer;
   border-bottom: 1px solid #f0f0f0;
+  background-color: #ffffff;
+  transition: background-color 0.2s;
 }
 
 .recent-chat-avatar {
@@ -98,12 +104,14 @@
   margin-right: 10px;
 }
 
-.recent-chat:hover {
-  background-color: #f1f1f1;
-}
-
 .recent-chat p {
   margin: 0;
+  color: #333; /* Ensure text is visible */
+  font-size: 14px;
+}
+
+.recent-chat:hover {
+  background-color: #f1f1f1;
 }
 
 /* Sidebar footer for settings */
