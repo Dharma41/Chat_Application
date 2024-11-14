@@ -126,8 +126,8 @@ const Authentication = () => {
           <span>OR</span>
         </div>
 
-        <button type="button" className="create-account-button">
-          <span onClick={() => setIsRegister(!isRegister)}>
+        <button type="button" className="create-account-button" onClick={() => setIsRegister(!isRegister)}>
+          <span >
             {isRegister ? 'Login Instead' : 'Create an Account'}
           </span>
         </button>
