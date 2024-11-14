@@ -142,25 +142,27 @@ const Chat = () => {
           )}
         </div>
         
-        <div className="message-input">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={textMessage}
-            onChange={(e) => setTextMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-          />
-          <label htmlFor="image-upload">
-            <i className="fas fa-paperclip"></i>
-          </label>
-          <input
-            type="file"
-            id="image-upload"
-            onChange={handleImageSelect}
-            style={{ display: "none" }}
-          />
-          <button onClick={handleSendMessage}>Send</button>
-        </div>
+        {selectedUser && (
+  <div className="message-input">
+    <input
+      type="text"
+      placeholder="Type a message..."
+      value={textMessage}
+      onChange={(e) => setTextMessage(e.target.value)}
+      onKeyPress={handleKeyPress}
+    />
+    <label htmlFor="image-upload">
+      <i className="fas fa-paperclip"></i>
+    </label>
+    <input
+      type="file"
+      id="image-upload"
+      onChange={handleImageSelect}
+      style={{ display: "none" }}
+    />
+    <button onClick={handleSendMessage}>Send</button>
+  </div>
+)}
       </div>
 
       {showAttachmentPreview && (
