@@ -287,3 +287,26 @@ httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
+app.get('/recent-chats', async (req, res) => {
+  const { user } = req.query;
+  try {
+    // Fetch distinct senders and receivers where the current user is involved
+    const recentChats = await Message.find({
+      $or: [{ sender: user }, { receiver: user }],
+    })
+      .sort({ timestamp: -1 }) // Sort by the latest message
+      .limit(10); // Limit to 10 recent chats (you can adjust as needed)
+
+    // Extract unique usernames from the chat messages
+    const users = new Set();
+    recentChats.forEach((chat) => {
+      if (chat.sender !== user) users.add(chat.sender);
+      if (chat.receiver !== user) users.add(chat.receiver);
+    });
+
+    res.status(200).json(Array.from(users));
+  } catch (error) {
+    console.error("Error fetching recent chats:", error);
+    res.status(500).json({ error: "Failed to fetch recent chats" });
+  }
+});

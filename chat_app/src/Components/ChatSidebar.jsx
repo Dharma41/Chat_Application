@@ -17,6 +17,24 @@ const ChatSidebar = ({ onSelectUser }) => {
   };
 
   useEffect(() => {
+    // Fetch recent chats for the current user
+    const fetchRecentChats = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/recent-chats?user=${encodeURIComponent(currentUser.username)}`
+        );
+        const data = await response.json();
+        setRecentChats(data);
+      } catch (error) {
+        console.error("Error fetching recent chats:", error);
+      }
+    };
+
+    fetchRecentChats();
+  }, [currentUser.username]);
+
+  // Search users based on the search query
+  useEffect(() => {
     const fetchUsers = async () => {
       if (searchQuery === "") {
         setSearchResults([]);
@@ -26,7 +44,9 @@ const ChatSidebar = ({ onSelectUser }) => {
 
       setLoading(true);
       try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users?search=${searchQuery}`);
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/users?search=${searchQuery}`
+        );
         const data = await response.json();
         setSearchResults(data);
         setNoResults(data.length === 0);
@@ -44,6 +64,7 @@ const ChatSidebar = ({ onSelectUser }) => {
   const handleSelectUser = (user) => {
     onSelectUser(user);
 
+    // Add to recent chats if not already included
     if (!recentChats.includes(user)) {
       setRecentChats((prevChats) => [user, ...prevChats]);
     }
@@ -97,7 +118,6 @@ const ChatSidebar = ({ onSelectUser }) => {
       </div>
 
       <div className="recent-chats">
-        <h3>{searchQuery ? "Search Results" : "Recent Chats"}</h3>
         {loading && <p>Loading...</p>}
         {!loading && noResults && <p>No users found</p>}
         {!loading &&
