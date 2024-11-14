@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../CSS/ChatSidebar.css";
 import ProfileModal from "./ProfileModal";
+import { io } from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_SERVER_URL);
 
 const ChatSidebar = ({ onSelectUser }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,7 +20,7 @@ const ChatSidebar = ({ onSelectUser }) => {
   };
 
   useEffect(() => {
-    // Fetch recent chats for the current user
+    // Fetch recent chats for the current user when component loads
     const fetchRecentChats = async () => {
       try {
         const response = await fetch(
@@ -31,7 +34,20 @@ const ChatSidebar = ({ onSelectUser }) => {
     };
 
     fetchRecentChats();
-  }, [currentUser.username]);
+
+    // Listen for messages in real-time via Socket.IO
+    socket.on("message-received", (message) => {
+      const otherUser = message.sender === currentUser.username ? message.receiver : message.sender;
+      if (!recentChats.includes(otherUser)) {
+        setRecentChats((prevChats) => [otherUser, ...prevChats]);
+      }
+    });
+
+    // Clean up the socket listener on component unmount
+    return () => {
+      socket.off("message-received");
+    };
+  }, [currentUser.username, recentChats]);
 
   // Search users based on the search query
   useEffect(() => {
