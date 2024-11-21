@@ -93,7 +93,7 @@
   padding: 10px 20px;
   cursor: pointer;
   border-bottom: 1px solid #f0f0f0;
-  background-color: #ffffff;
+  background-color: #075e54;
   transition: background-color 0.2s;
 }
 
@@ -106,7 +106,7 @@
 
 .recent-chat p {
   margin: 0;
-  color: #333; /* Ensure text is visible */
+  color: #fff; /* Ensure text is visible */
   font-size: 14px;
 }
 

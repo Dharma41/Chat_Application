@@ -248,13 +248,13 @@
 }
 
 .recent-chat:hover {
-  background-color: #e0e0e0;
+  background-color: #a5a3a3;
 }
 
 .recent-chat p {
   margin: 0;
   font-size: 14px;
-  color: #333;
+  color: #fff;
 }
 
 /* Text truncation for user names */
