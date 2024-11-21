@@ -139,3 +139,19 @@ html {
 .nav-link {
   animation-delay: 0.7s;
 }
+/* Styling for the logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between the image and text */
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo-image {
+  height: 40px; /* Adjust size as needed */
+  width: 40px; /* Adjust size as needed */
+  object-fit: contain; /* Maintain aspect ratio */
+}
