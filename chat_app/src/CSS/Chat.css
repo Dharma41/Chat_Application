@@ -97,7 +97,7 @@
   padding: 20px;
   overflow-y: auto;
   background-color: #e5ddd5;
-  background-image: url('../Assets/chatImage.png');
+  /* background-image: url('../Assets/chatImage.png'); */
   background-size: cover;
   background-position: center;
 }

@@ -9,8 +9,8 @@ function ProfileModal({ isOpen, onClose, profile }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <img src={profile.avatar} alt="Profile" className="profile-modal-avatar" />
-        <h2>{profile.username}</h2>
-        <p>{profile.email}</p>
+        <h2 className='profile-name'>{profile.username}</h2>
+        <p className='profile-email'>{profile.email}</p>
         
         <button onClick={onClose} className="close-button">Close</button>
       </div>

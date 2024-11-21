@@ -38,7 +38,7 @@ function ChatMessage({ text, timestamp, sender, currentUser, files = [] }) {
       {/* Modal to display the image when clicked */}
       <ImageModal isOpen={isModalOpen} imageUrl={selectedImage} onClose={closeModal} />
     </div>
-  );
+  );  
 }
 
 export default ChatMessage;

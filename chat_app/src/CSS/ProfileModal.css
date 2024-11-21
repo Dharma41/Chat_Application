@@ -33,7 +33,7 @@
   object-fit: cover;
 }
 
-h2 {
+.profile-name {
   font-size: 1.8rem;
   margin: 0;
   margin-bottom: 10px;
@@ -41,11 +41,11 @@ h2 {
   color: #f5f5f5; /* Bright text for username */
 }
 
-p {
+.profile-email {
   font-size: 1rem;
   margin: 0;
   margin-bottom: 20px;
-  color: #b0b0b0; /* Softer text for email */
+  color: #000000; /* Softer text for email */
 }
 
 .close-button {
